@@ -1,0 +1,103 @@
+/* body{
+    margin: 0px;
+    padding: 0px;
+} */
+
+.node{
+
+    padding: 0px;
+    width: 30px;
+    height: 30px;
+    outline:1px solid lightblue;
+    display: inline-block;
+    margin-right: 0.7px ;
+    margin-bottom: -6px;
+}
+
+
+.inPath{
+    background-color: teal !important;
+    opacity: 0.7 !important;
+    border: 0px solid rgb(175, 216, 248);
+    animation-name: visitedAnimation;
+    animation-duration: 1.5s;
+    animation-timing-function: ease-out;
+    animation-delay: 0;
+    animation-direction: alternate;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+    animation-play-state: running;
+
+}
+
+.inPathFirst{
+    background-color: darkgoldenrod;
+    opacity: 0.7 
+}
+
+.inShortestPath{
+    /* background-color: yellow; */
+    /* background-color:darkblue; */
+    opacity: 0.7 
+}
+
+.isWall{
+    background-color: black ;
+    opacity: 0.7 
+}
+
+
+
+.isStart{
+    /* background-color: red; */
+    background-image: url(../../Logos/disc_icon.jpg) ;
+    background-repeat: no-repeat;
+    background-size:contain
+    /* background: url(../../Logos/flag_icon.png); */
+}
+
+
+
+.left {
+    background: url(../../Logos/left-arrow.png);
+    z-index: 11;
+    background-repeat: no-repeat;
+    background-size:contain
+}
+
+.right {
+    background: url(../../Logos/right-arrow.png);
+    z-index: 11;
+    background-repeat: no-repeat;
+    background-size:contain;
+     
+}
+
+.up{
+    background: url(../../Logos/up-arrow.png);
+    z-index: 11;
+    background-repeat: no-repeat;
+    background-size:contain;
+    
+}
+
+.down{
+    background: url(../../Logos/down-arrow.png);
+    z-index: 11;
+    background-repeat: no-repeat;
+    background-size:contain;
+    
+}
+
+.isFinish{
+    background: url(../../Logos/download.svg);
+    z-index: 10;
+    /* transform: scale(1) translate(-35%, -70%); */
+    cursor: grab;
+    background-repeat: no-repeat;
+    background-size:contain;
+    
+}
+/* .vl {
+    background: linear-gradient(#000, #000) no-repeat center/2px 100%;
+  } */
