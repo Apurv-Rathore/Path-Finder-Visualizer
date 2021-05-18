@@ -124,6 +124,7 @@ export default class PathFinding extends Component {
         }, 5 * i);
         return;
       }
+      //ss
       setTimeout(() => {
         const node = visitedNodesInOrder[i];
         const end_row = node[0];
