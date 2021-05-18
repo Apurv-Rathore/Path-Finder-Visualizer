@@ -1,1 +1,2 @@
-Can bring up a popup indicating the total distance covered and how many nodes covered , and the time taken
+1. Can bring up a popup indicating the total distance covered and how many nodes covered , and the time taken
+2. wormholes

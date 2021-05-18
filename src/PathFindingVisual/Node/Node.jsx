@@ -62,11 +62,12 @@ export default class Node extends Component {
     }
     return <div onMouseDown={() => onMouseDown(row, col)}
     onMouseEnter={() => onMouseEnter(row, col)}
-    onMouseUp={() => onMouseUp()} className={`node ${extraClassName} ${arrowClassName}`}>
-      {/* <div className={` ${arrowClassName}`}></div> */}
-      
-
-
+    // draggable={true?extraClassName==="isFinish":false}
+    onMouseUp={() => onMouseUp()} className={`node ${extraClassName} ${arrowClassName}` }>
+      <div className={` ${arrowClassName}`}></div>
+      {/* <div
+      className = {`innode ${extraClassName} ${arrowClassName}`}
+      ></div> */}
     </div>;
   }
 }

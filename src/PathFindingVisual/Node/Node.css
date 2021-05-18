@@ -10,9 +10,23 @@
     height: 30px;
     outline:1px solid lightblue;
     display: inline-block;
-    margin-right: 0.7px ;
+    margin-right: 0px ;
     margin-bottom: -6px;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+    /* opacity: 1; */
 }
+
+.node:hover{
+    /* scale: 2,2; */
+    /* transform: scale(1.1,1.1); */
+    /* transition: transform 0.3s; */
+    /* transform:  scaleX(1.1) scaleY(1.1) ; */
+    /* opacity: 0; */
+} 
 
 
 .inPath{
@@ -38,12 +52,39 @@
 .inShortestPath{
     /* background-color: yellow; */
     /* background-color:darkblue; */
-    opacity: 0.7 
+    opacity: 0.7 ;
+    /* border: 1px solid rgb(175, 216, 248); 
+    background-color: rgb(255, 254, 106);
+    animation-name: triangletwo;
+    animation-duration: 1.5s;
+    animation-timing-function: linear;
+    animation-delay: 0;
+    animation-direction: alternate;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+    animation-play-state: running; */
 }
 
 .isWall{
     background-color: black ;
-    opacity: 0.7 
+    outline: none;
+    opacity: 0.8 ;
+    /* transition: transform 0.3s; */
+    /* transform:  scaleX(1) scaleY(1) ; */
+    animation: smallToBig 0.3s ease-out ;
+    /* transform: scaleX(2) scaleY(2); */
+    /* transform:translate(+25%, +25%) scale(1); */
+}
+@keyframes smallToBig {
+    0%{
+        transform:  scaleX(1) scaleY(1) ;
+    }
+    50%{
+        transform:  scaleX(0.7) scaleY(0.7) ;
+    }
+    100%{
+        transform:  scaleX(1) scaleY(1) ;
+    }
 }
 
 
@@ -90,14 +131,13 @@
 }
 
 .isFinish{
+    /* pointer-events: none; */
     background: url(../../Logos/download.svg);
-    z-index: 10;
+    /* z-index: 10; */
     /* transform: scale(1) translate(-35%, -70%); */
-    cursor: grab;
+    /* cursor: grab; */
     background-repeat: no-repeat;
     background-size:contain;
     
+    
 }
-/* .vl {
-    background: linear-gradient(#000, #000) no-repeat center/2px 100%;
-  } */

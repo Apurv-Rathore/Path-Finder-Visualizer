@@ -1,24 +1,35 @@
 import React, { Component } from "react";
-import Node from "./Node/Node";
-
-import "./PathFinding.css";
-
-import bfs from "../algorithms/bfs";
-import dfs from "../algorithms/dfs";
 
 import nodesInShortestPath from "../helper functions/nodesInShortestPath";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Navbar, Nav, NavDropdown, Button } from "react-bootstrap";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+
+import "reactjs-popup/dist/index.css";
+
+import Node from "./Node/Node";
+
+import "./PathFinding.css";
+
+
+import bfs from "../algorithms/bfs";
+import dfs from "../algorithms/dfs";
+import astar from "../algorithms/astar";
+
+
+
+
+
 
 //constants
-const START_ROW = 10;
-const START_COL = 10;
-const END_ROW = 10;
-const END_COLUMN = 31;
+let START_ROW = 10;
+let START_COL = 10;
+let END_ROW = 10;
+let END_COLUMN = 31;
 
-const NUMBER_OF_ROW = 16;
-const NUMBER_OF_COL = 49;
+const NUMBER_OF_ROW = 20;
+const NUMBER_OF_COL = 50;
+
+
 
 export default class PathFinding extends Component {
   constructor(props) {
@@ -27,16 +38,29 @@ export default class PathFinding extends Component {
       grid: [],
       mouseIsPressed: false,
       currentAlgo: "BFS",
+      mousePressedTarget: false,
+      mousePressedSource: false,
+      currentHeuristic: "Manhattan"
     };
   }
 
   componentDidMount() {
-    const grid = getInitialGrid(false,[]);
+    const grid = getInitialGrid(false, []);
     this.setState({ grid });
   }
 
   //mouse events
   handleMouseDown(row, col) {
+    this.clearPath();
+    if (row === END_ROW && col === END_COLUMN) {
+      this.setState({ mousePressedTarget: true });
+      return;
+    }
+    if (row===START_ROW && col===START_COL){
+      this.setState({ mousePressedSource: true });
+      return;
+    }
+    
     const newGrid = getNewGridWithWallToggled(this.state.grid, row, col);
     if (col === END_COLUMN && row === END_ROW) {
       this.setState({ grid: this.state.grid, mouseIsPressed: true });
@@ -44,8 +68,30 @@ export default class PathFinding extends Component {
       this.setState({ grid: newGrid, mouseIsPressed: true });
     }
   }
-
   handleMouseEnter(row, col) {
+    // console.log("mouse enter");
+    if (this.state.mousePressedTarget===true){
+      if (row===START_ROW && col===START_COL){
+        return;
+      }
+      const newGrid = getNewGridWithTargetChanged(this.state.grid,row,col);
+      this.setState({grid:newGrid});
+      END_COLUMN=col;
+      END_ROW=row;
+      return;
+    }
+    // mousePressedSource
+    if (this.state.mousePressedSource===true){
+      if (row===END_ROW && col===END_COLUMN){
+        return;
+      }
+      const newGrid = getNewGridWithSourceChanged(this.state.grid,row,col);
+      this.setState({grid:newGrid});
+      START_COL=col;
+      START_ROW=row;
+      return;
+    }
+
     if (!this.state.mouseIsPressed) return;
     if (col === END_COLUMN && row === END_ROW) {
       return;
@@ -53,9 +99,9 @@ export default class PathFinding extends Component {
     const newGrid = getNewGridWithWallToggled(this.state.grid, row, col);
     this.setState({ grid: newGrid });
   }
-
   handleMouseUp() {
-    this.setState({ mouseIsPressed: false });
+    // console.log("mouse up");
+    this.setState({ mouseIsPressed: false, mousePressedTarget: false, mousePressedSource:false });
   }
 
   animateAlgo(visitedNodesInOrder, nodesInShortestPathOrder, algo) {
@@ -95,7 +141,7 @@ export default class PathFinding extends Component {
         newGrid[end_row][end_col].inPath = true;
 
         this.setState({ newGrid });
-      }, 1.1 * i);
+      }, 1.1* i);
     }
   }
 
@@ -117,11 +163,12 @@ export default class PathFinding extends Component {
 
   //function for resetting the grid
   resetGrid = () => {
-    const grid = getInitialGrid(false,[]);
+    const grid = getInitialGrid(false, []);
     this.setState({ grid });
   };
 
   drawArrows = (parent) => {
+    console.log("fuckkkkkkk");
     let end_row = END_ROW;
     let end_col = END_COLUMN;
     while (end_row !== START_ROW || end_col !== START_COL) {
@@ -167,6 +214,33 @@ export default class PathFinding extends Component {
 
   parent = -1;
   visualizeAlgo = () => {
+    this.clearPath();
+    if (this.state.currentAlgo==="ASTAR"){
+      console.log("this.state.currentHeuristic",this.state.currentHeuristic);
+      const currentHeuristic = this.state.currentHeuristic;
+      const {parent,visitedNodes} = astar(START_ROW,
+        START_COL,
+        END_ROW,
+        END_COLUMN,
+        this.state.grid,
+        NUMBER_OF_COL,
+        NUMBER_OF_ROW,
+        currentHeuristic);
+        console.log(parent);
+        let nodesInShortestPathOrder=[];
+        console.log(parent);
+        if (parent !== -1 && parent!=undefined) {
+          nodesInShortestPathOrder = nodesInShortestPath(
+            parent,
+            START_ROW,
+            START_COL,
+            END_ROW,
+            END_COLUMN
+          );
+          this.drawArrows(parent);
+        }
+        this.animateAlgo(visitedNodes, nodesInShortestPathOrder, "BFS");
+    }
     if (this.state.currentAlgo == "BFS") {
       console.log("in bfs");
       let { parent, visitedNodesInOrder } = bfs(
@@ -215,57 +289,37 @@ export default class PathFinding extends Component {
       }
       this.animateAlgo(visitedNodesInOrder, visitedNodesInOrder, "DFS");
     }
-
-    // let end_row = END_ROW;
-    // let end_col = END_COLUMN;
-    // while (end_row !== START_ROW || end_col !== START_COL) {
-    //   let newGrid = this.state.grid;
-    //   newGrid[end_row][end_col].direction = parent[end_row][end_col];
-    //   this.setState({ newGrid });
-    //   if (parent[end_row][end_col] == "U") {
-    //     end_row -= 1;
-    //   } else if (parent[end_row][end_col] == "D") {
-    //     end_row += 1;
-    //   } else if (parent[end_row][end_col] == "L") {
-    //     end_col -= 1;
-    //   } else {
-    //     end_col += 1;
-    //   }
-    // }
   };
 
   clearPath = () => {
-    this.setState({grid: getInitialGrid(true,this.state.grid)})
+    this.setState({ grid: getInitialGrid(true, this.state.grid) });
   };
 
+
+  generateMaze = () => {
+    alert("to generate a maze");
+  }
   render() {
     const { grid, mouseIsPressed } = this.state;
     return (
-      <>
-        <div className="headerr" style={{ marginBottom: 70 }}>
+      <div className="containerr">
+        <div className="headerr" style={{ marginBottom: 50 }}>
           <div className="navbarr">
             <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
               <Navbar.Brand
                 href="#home"
-                style={{ marginLeft: 4, fontSize: 35 }}
+                // style={{ marginLeft: 4, fontSize: 35 }}
               >
                 The PathFinder
               </Navbar.Brand>
-              {/* <Button
-                style={{ marginRight: 10 }}
-                onClick={() => this.resetGrid()}
-              >
-                Reset Grid
-              </Button> */}
               <Nav.Link
-                style={{ marginRight: 10, fontSize: 25 }}
+                // style={{ marginRight: 10, fontSize: 25 }}
                 onClick={() => this.resetGrid()}
               >
                 Reset Grid
               </Nav.Link>
-
               <Nav.Link
-                style={{ marginRight: 10, fontSize: 25 }}
+                // style={{ marginRight: 10, fontSize: 25 }}
                 onClick={() => this.clearPath()}
               >
                 Clear Path
@@ -273,7 +327,7 @@ export default class PathFinding extends Component {
 
               <Button
                 onClick={() => this.visualizeAlgo()}
-                style={{ marginRight: 20, marginLeft: 20, fontSize: 20 }}
+                // style={{ marginRight: 20, marginLeft: 20, fontSize: 20 }}
               >
                 Visualize {this.state.currentAlgo}
               </Button>
@@ -281,14 +335,15 @@ export default class PathFinding extends Component {
               <Navbar.Collapse id="responsive-navbar-nav">
                 <Nav className="mr-auto">
                   <Nav.Link
-                    style={{ marginRight: 10, fontSize: 25, color: "#0d6efd" }}
+                  // style={{ marginRight: 10, fontSize: 25, color: "#0d6efd" }}
+                  onClick={()=>{this.generateMaze()}}
                   >
-                    Maze and Pattern
+                    Random Maze Generator
                   </Nav.Link>
                   <NavDropdown
                     title="Algorithms"
                     id="collasible-nav-dropdown"
-                    style={{ marginRight: 10, fontSize: 25, color: "#0d6efd" }}
+                    // style={{ marginRight: 10, fontSize: 25, color: "#0d6efd" }}
                   >
                     <NavDropdown.Item
                       onClick={() => this.setState({ currentAlgo: "BFS" })}
@@ -313,6 +368,32 @@ export default class PathFinding extends Component {
                     <NavDropdown.Divider />
                     <NavDropdown.Item href="#action/3.4">
                       Separated link
+                    </NavDropdown.Item>
+                  </NavDropdown>
+                  <NavDropdown
+                    title={`Heuristic: ${this.state.currentHeuristic}`}
+                    id="collasible-nav-dropdown"
+                    // style={{ marginRight: 10, fontSize: 25, color: "#0d6efd" }}
+                  >
+                    <NavDropdown.Item
+                      onClick={() => this.setState({ currentHeuristic: "Manhattan" })}
+                    >
+                      Manhattan
+                    </NavDropdown.Item>
+                    <NavDropdown.Item
+                      onClick={() => this.setState({ currentHeuristic: "Euclidean" })}
+                    >
+                      Euclidean
+                    </NavDropdown.Item>
+                    <NavDropdown.Item
+                      onClick={() => this.setState({ currentHeuristic: "Octile" })}
+                    >
+                      Octile
+                    </NavDropdown.Item>
+                    <NavDropdown.Item
+                      onClick={() => this.setState({ currentHeuristic: "Chebyshev" })}
+                    >
+                      Chebyshev 
                     </NavDropdown.Item>
                   </NavDropdown>
                 </Nav>
@@ -348,12 +429,13 @@ export default class PathFinding extends Component {
                       inPathFirst={inPathFirst}
                       inShortestPath={inShortestPath}
                       isWall={isFinish || isStart ? false : isWall}
+                      onMouseUp={() => this.handleMouseUp()}
                       mouseIsPressed={mouseIsPressed}
                       onMouseDown={(row, col) => this.handleMouseDown(row, col)}
                       onMouseEnter={(row, col) =>
                         this.handleMouseEnter(row, col)
                       }
-                      onMouseUp={() => this.handleMouseUp()}
+                      
                       row={row}
                     ></Node>
                   );
@@ -362,25 +444,28 @@ export default class PathFinding extends Component {
             );
           })}
         </div>
-      </>
+        {/* <div className="popupContainer">
+            hey i am a popup
+          </div> */}
+      </div>
     );
   }
 }
 
-const getInitialGrid = (isClearPath,gridArg) => {
+const getInitialGrid = (isClearPath, gridArg) => {
   if (isClearPath) {
     let grid = gridArg;
     for (let row = 0; row < NUMBER_OF_ROW; row++) {
       for (let col = 0; col < NUMBER_OF_COL; col++) {
         // currentRow.push(createNode(col, row, isClearPath));
-        
-        grid[row][col].isVisited =  false
+
+        grid[row][col].isVisited = false;
         // grid[row][col].isWall =  false,
-        grid[row][col].previousNode =  null
-        grid[row][col].inPath =  false
-        grid[row][col].inPathFirst =  false
-        grid[row][col].inShortestPath =  false
-        grid[row][col].direction =  ""
+        grid[row][col].previousNode = null;
+        grid[row][col].inPath = false;
+        grid[row][col].inPathFirst = false;
+        grid[row][col].inShortestPath = false;
+        grid[row][col].direction = "";
       }
     }
     return grid;
@@ -412,6 +497,23 @@ const createNode = (col, row, isClearPath) => {
     direction: "",
   };
 };
+
+const getNewGridWithTargetChanged = (grid, row, col) => {
+  const newGrid = grid.slice();
+  newGrid[END_ROW][END_COLUMN].isFinish=false;
+  newGrid[row][col].isFinish=true;
+  return newGrid
+}
+
+
+
+const getNewGridWithSourceChanged = (grid, row, col) => {
+  const newGrid = grid.slice();
+  newGrid[START_ROW][START_COL].isStart=false;
+  newGrid[row][col].isStart=true;
+  return newGrid
+}
+
 const getNewGridWithWallToggled = (grid, row, col) => {
   const newGrid = grid.slice();
   const node = newGrid[row][col];
