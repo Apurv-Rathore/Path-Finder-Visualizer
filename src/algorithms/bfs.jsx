@@ -64,6 +64,7 @@ const bfs = (START_ROW, START_COL, END_ROW, END_COLUMN, grid,NUMBER_OF_COL,NUMBE
     }
     if (x + 1 < NUMBER_OF_ROW) {
       x += 1;
+      
       if (grid[x][y].isWall == false) {
         if (visited[x][y] == false) {
           visited[x][y] = true;
@@ -75,6 +76,7 @@ const bfs = (START_ROW, START_COL, END_ROW, END_COLUMN, grid,NUMBER_OF_COL,NUMBE
     }
     if (x > 0) {
       x -= 1;
+      
       if (grid[x][y].isWall == false) {
         if (visited[x][y] == false) {
           visited[x][y] = true;
@@ -86,6 +88,7 @@ const bfs = (START_ROW, START_COL, END_ROW, END_COLUMN, grid,NUMBER_OF_COL,NUMBE
     }
     if (y + 1 < NUMBER_OF_COL) {
       y += 1;
+      
       if (grid[x][y].isWall == false) {
         if (visited[x][y] == false) {
           visited[x][y] = true;
@@ -97,6 +100,7 @@ const bfs = (START_ROW, START_COL, END_ROW, END_COLUMN, grid,NUMBER_OF_COL,NUMBE
     }
     if (y > 0) {
       y -= 1;
+      
       if (grid[x][y].isWall == false) {
         if (visited[x][y] == false) {
           visited[x][y] = true;

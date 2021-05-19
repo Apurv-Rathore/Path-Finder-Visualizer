@@ -6,8 +6,8 @@
 .node{
 
     padding: 0px;
-    width: 30px;
-    height: 30px;
+    width: 25px;
+    height: 25px;
     outline:1px solid lightblue;
     display: inline-block;
     margin-right: 0px ;
@@ -23,14 +23,14 @@
 .node:hover{
     /* scale: 2,2; */
     /* transform: scale(1.1,1.1); */
-    /* transition: transform 0.3s; */
+    /* transition: transform 0.1s; */
     /* transform:  scaleX(1.1) scaleY(1.1) ; */
     /* opacity: 0; */
 } 
 
 
 .inPath{
-    background-color: teal !important;
+    background-color:	#0145ff  !important;
     opacity: 0.7 !important;
     border: 0px solid rgb(175, 216, 248);
     animation-name: visitedAnimation;
@@ -41,12 +41,16 @@
     animation-iteration-count: 1;
     animation-fill-mode: forwards;
     animation-play-state: running;
+    animation: smallToBig 0.1s ease-out ;
 
 }
 
 .inPathFirst{
-    background-color: darkgoldenrod;
-    opacity: 0.7 
+    /* background-color: rgb(10, 15, 59); */
+    background-color: rgb(2, 36, 51);
+    opacity: 0.7 ;
+    animation: smallToBig 0.1s ease-out ;
+    
 }
 
 .inShortestPath{
@@ -67,25 +71,11 @@
 
 .isWall{
     background-color: black ;
-    outline: none;
-    opacity: 0.8 ;
-    /* transition: transform 0.3s; */
-    /* transform:  scaleX(1) scaleY(1) ; */
-    animation: smallToBig 0.3s ease-out ;
-    /* transform: scaleX(2) scaleY(2); */
-    /* transform:translate(+25%, +25%) scale(1); */
+    outline:1px solid #232b2e;
+    opacity: 0.9 ;
+    /* animation: smallToBig 0.1s ease-out ; */
 }
-@keyframes smallToBig {
-    0%{
-        transform:  scaleX(1) scaleY(1) ;
-    }
-    50%{
-        transform:  scaleX(0.7) scaleY(0.7) ;
-    }
-    100%{
-        transform:  scaleX(1) scaleY(1) ;
-    }
-}
+
 
 
 
@@ -103,7 +93,8 @@
     background: url(../../Logos/left-arrow.png);
     z-index: 11;
     background-repeat: no-repeat;
-    background-size:contain
+    background-size:contain;
+    animation: smallToBig 0.1s ease-out ;
 }
 
 .right {
@@ -111,6 +102,7 @@
     z-index: 11;
     background-repeat: no-repeat;
     background-size:contain;
+    animation: smallToBig 0.1s ease-out ;
      
 }
 
@@ -119,7 +111,7 @@
     z-index: 11;
     background-repeat: no-repeat;
     background-size:contain;
-    
+    animation: smallToBig 0.1s ease-out ;
 }
 
 .down{
@@ -127,7 +119,7 @@
     z-index: 11;
     background-repeat: no-repeat;
     background-size:contain;
-    
+    animation: smallToBig 0.1s ease-out ;
 }
 
 .isFinish{
@@ -138,6 +130,43 @@
     /* cursor: grab; */
     background-repeat: no-repeat;
     background-size:contain;
+    animation: smallToBig 0.5s ease-out ;
     
     
 }
+/* @keyframes smallToBigFinish {
+    0%{
+        transform:  scaleX(1) scaleY(1) ;
+    }
+    50%{
+        transform:  scaleX(1.5) scaleY(1.5) ;
+    }
+    100%{
+        transform:  scaleX(1.1) scaleY(1.1) ;
+    }
+} */
+
+@keyframes smallToBig  {
+    0% {
+      transform: scale(0.5);
+      
+      border-radius: 50%;
+    }
+  
+    50% {
+      transform: scale(0.8);
+      
+      border-radius: 25%;
+    }
+  
+    75% {
+      transform: scale(1.2);
+      
+      border-radius: 20%;
+    }
+  
+    100% {
+      transform: scale(1);
+      
+    }
+  }

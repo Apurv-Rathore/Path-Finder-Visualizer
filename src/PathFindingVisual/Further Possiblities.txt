@@ -1,2 +1,6 @@
-1. Can bring up a popup indicating the total distance covered and how many nodes covered , and the time taken
-2. wormholes
+1. wormholes
+2. add more algorithms and correct the ASTAR
+3. change the start image
+4. add the random maze generator
+5. increase the speed of the animations, for the f's sake they are so slow
+6. make anything on the screen unclikcable untill the animatins are complete
