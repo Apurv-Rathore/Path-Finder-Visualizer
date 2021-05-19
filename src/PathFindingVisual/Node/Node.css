@@ -74,7 +74,7 @@
     background-color: black ;
     outline:1px solid #232b2e;
     opacity: 0.9 ;
-    animation: smallToBig 0.1s ease-out ;
+    /* animation: smallToBig 0.1s ease-out ; */
 }
 
 

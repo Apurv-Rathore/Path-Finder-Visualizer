@@ -372,9 +372,9 @@ export default class PathFinding extends Component {
       <div className="containerr">
         <div className="headerr" style={{ marginBottom: 10 }}>
           <div className="navbarr">
-            <Navbar style={{fontSize:18}} collapseOnSelect expand="lg" bg="dark" variant="dark">
+            <Navbar style={{fontSize:17}} collapseOnSelect expand="lg" bg="dark" variant="dark">
               <Navbar.Brand
-                style={{fontSize:25}}
+                style={{fontSize:30}}
                 href="#home"
                 // style={{ marginLeft: 4, fontSize: 35 }}
               >
@@ -393,26 +393,15 @@ export default class PathFinding extends Component {
                 Clear Path
               </Nav.Link>
 
-              <Button
-                onClick={() => this.visualizeAlgo()}
-                // style={{ marginRight: 20, marginLeft: 20, fontSize: 20 }}
-              >
-                Visualize {this.state.currentAlgo}
-              </Button>
+              
               <Navbar.Toggle aria-controls="responsive-navbar-nav" />
               <Navbar.Collapse id="responsive-navbar-nav">
                 <Nav className="mr-auto">
-                  <Nav.Link
-                    // style={{ marginRight: 10, fontSize: 25, color: "#0d6efd" }}
-                    onClick={() => {
-                      this.generateMaze();
-                    }}
-                  >
-                    Random Maze Generator
-                  </Nav.Link>
+                  
                   
 
                   <NavDropdown
+                  
                     title="Generate Maze"
                     id="collasible-nav-dropdown"
                     // style={{ marginRight: 10, fontSize: 25, color: "#0d6efd" }}
@@ -501,6 +490,13 @@ export default class PathFinding extends Component {
                       Chebyshev
                     </NavDropdown.Item>
                   </NavDropdown>
+                  <Button
+              
+                onClick={() => this.visualizeAlgo()}
+                // style={{ marginRight: 20, marginLeft: 20, fontSize: 20 }}
+              >
+                Visualize {this.state.currentAlgo}
+              </Button>
                 </Nav>
                 <Nav></Nav>
               </Navbar.Collapse>
