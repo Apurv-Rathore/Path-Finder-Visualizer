@@ -25,7 +25,7 @@ let START_COL = 10;
 let END_ROW = 10;
 let END_COLUMN = 31;
 
-const NUMBER_OF_ROW = 23;
+const NUMBER_OF_ROW = 25;
 const NUMBER_OF_COL = 60;
 
 export default class PathFinding extends Component {
@@ -40,7 +40,8 @@ export default class PathFinding extends Component {
       currentHeuristic: "Manhattan",
       msgDisplay: "none",
       msgOpacity: 0,
-      timeTaken: 0
+      timeTaken: 0,
+      currentMaze: "recDiv"
     };
   }
 
@@ -322,13 +323,12 @@ export default class PathFinding extends Component {
     this.setState({ grid: getInitialGrid(true, this.state.grid,false) });
   };
 
-  generateMaze = () => {
+  generateMaze = (currentMaze) => {
     let tempGrid = this.state.grid;
     tempGrid[START_ROW][START_COL].isStart = false;
     START_ROW = 1;
     START_COL = 1;
     tempGrid[START_ROW][START_COL].isStart = true;
-
     tempGrid[END_ROW][END_COLUMN].isFinish=false;
     END_COLUMN = NUMBER_OF_COL-2;
     END_ROW = NUMBER_OF_ROW-2;
@@ -336,12 +336,24 @@ export default class PathFinding extends Component {
     this.setState({grid:tempGrid});
     this.setState({ grid: getInitialGrid(true, this.state.grid,true) });
 
-    const newGrid = recursiveDivision(this.state.grid,START_ROW,START_COL , END_ROW, END_COLUMN,NUMBER_OF_ROW,NUMBER_OF_COL);
-    this.setState({grid:newGrid});
 
-    // const newGrid = verticalMaze(this.state.grid,START_ROW,START_COL , END_ROW, END_COLUMN,NUMBER_OF_ROW,NUMBER_OF_COL);
-    // // console.log(newGrid)
-    // this.setState({grid:newGrid});
+    if (currentMaze==="recDiv"){
+      const newGrid = recursiveDivision(this.state.grid,START_ROW,START_COL , END_ROW, END_COLUMN,NUMBER_OF_ROW,NUMBER_OF_COL);
+      this.setState({grid:newGrid});
+    }
+    if (currentMaze==="randomMaze"){
+      let {walls,newGrid} = randomMaze(this.state.grid,START_ROW,START_COL , END_ROW, END_COLUMN,NUMBER_OF_ROW,NUMBER_OF_COL);
+      this.setState({grid:newGrid});
+    }
+    if (currentMaze==="verticalMaze"){
+      const newGrid = verticalMaze(this.state.grid,START_ROW,START_COL , END_ROW, END_COLUMN,NUMBER_OF_ROW,NUMBER_OF_COL);
+      this.setState({grid:newGrid});
+    }
+    if (currentMaze==="horzMaze"){
+      const newGrid = verticalMaze(this.state.grid,START_ROW,START_COL , END_ROW, END_COLUMN,NUMBER_OF_ROW,NUMBER_OF_COL);
+      this.setState({grid:newGrid});
+    }
+
 
 
 
@@ -360,8 +372,9 @@ export default class PathFinding extends Component {
       <div className="containerr">
         <div className="headerr" style={{ marginBottom: 10 }}>
           <div className="navbarr">
-            <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+            <Navbar style={{fontSize:18}} collapseOnSelect expand="lg" bg="dark" variant="dark">
               <Navbar.Brand
+                style={{fontSize:25}}
                 href="#home"
                 // style={{ marginLeft: 4, fontSize: 35 }}
               >
@@ -398,35 +411,33 @@ export default class PathFinding extends Component {
                     Random Maze Generator
                   </Nav.Link>
                   
+
                   <NavDropdown
-                    title="Maze"
+                    title="Generate Maze"
                     id="collasible-nav-dropdown"
                     // style={{ marginRight: 10, fontSize: 25, color: "#0d6efd" }}
                   >
                     <NavDropdown.Item
-                      onClick={() => this.setState({ currentAlgo: "BFS" })}
+                      onClick={() => this.generateMaze("recDiv")}
                     >
-                      Breath first search
+                      Recursive Division Maze
                     </NavDropdown.Item>
                     <NavDropdown.Item
-                      onClick={() => this.setState({ currentAlgo: "DFS" })}
+                      onClick={() => this.generateMaze("randomMaze")}
                     >
-                      Depth first search
+                      Random Maze
                     </NavDropdown.Item>
                     <NavDropdown.Item
-                      onClick={() => this.setState({ currentAlgo: "ASTAR" })}
+                      onClick={() => this.generateMaze("verticalMaze")}
                     >
-                      A*
+                      Vertical Division Maze
                     </NavDropdown.Item>
                     <NavDropdown.Item
-                      onClick={() => this.setState({ currentAlgo: "DIJKSTRA" })}
+                      onClick={() => this.generateMaze("horzMaze")}
                     >
-                      Dijkstra
+                      Horizontal Division Maze
                     </NavDropdown.Item>
-                    <NavDropdown.Divider />
-                    <NavDropdown.Item href="#action/3.4">
-                      Separated link
-                    </NavDropdown.Item>
+                    
                   </NavDropdown>
 
 
@@ -454,10 +465,6 @@ export default class PathFinding extends Component {
                       onClick={() => this.setState({ currentAlgo: "DIJKSTRA" })}
                     >
                       Dijkstra
-                    </NavDropdown.Item>
-                    <NavDropdown.Divider />
-                    <NavDropdown.Item href="#action/3.4">
-                      Separated link
                     </NavDropdown.Item>
                   </NavDropdown>
                   <NavDropdown
@@ -541,7 +548,7 @@ export default class PathFinding extends Component {
             );
           })}
         </div>
-        <div class="message" style={{display:this.state.msgDisplay, opacity: this.msgOpacity}}>Time Taken: {Math.floor(this.state.timeTaken)} ms</div>
+        <div class="message" style={{display:this.state.msgDisplay, opacity: this.msgOpacity, fontSize:20}}>Time Taken: {Math.floor(this.state.timeTaken)} ms</div>
         {/* <div className="popupContainer">
             hey i am a popup
           </div> */}

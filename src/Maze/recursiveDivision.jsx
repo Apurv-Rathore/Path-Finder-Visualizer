@@ -13,20 +13,22 @@ function recursiveDivision(
   let vertical = [];
   let horizontal = [];
 
-  for (let row = 0; row < grid.length; row++) horizontal.push(row);
-  for (let col = 0; col < grid[0].length; col++) vertical.push(col);
-//   for (let row = 0; row < NUMBER_OF_ROW; row++) {
-//     if (row==START_ROW && (0==START_COL || START_COL==NUMBER_OF_COL-1)) continue;
-//     if (row==END_ROW && (0==END_COL || END_COL==NUMBER_OF_COL-1)) continue;
-//     grid[row][0].isWall = true;
-//     grid[row][NUMBER_OF_COL-1].isWall = true;
-// }
-// for (let col = 0; col < NUMBER_OF_COL; col++) {
-//     if (col==START_COL && (0==START_ROW || START_ROW==NUMBER_OF_ROW-1)) continue;
-//     if (col==END_COL && (0==END_ROW || END_ROW ==NUMBER_OF_ROW-1)) continue;
-//     grid[0][col].isWall=true;
-//     grid[NUMBER_OF_ROW-1][col].isWall=true;
-// }
+  for (let row = 1; row < grid.length; row++) horizontal.push(row);
+  for (let col = 1; col < grid[0].length; col++) vertical.push(col);
+  for (let row = 0; row < NUMBER_OF_ROW; row++) {
+    if (row==START_ROW && (0==START_COL || START_COL==NUMBER_OF_COL-1)) continue;
+    if (row==END_ROW && (0==END_COL || END_COL==NUMBER_OF_COL-1)) continue;
+    grid[row][0].isWall = true;
+    grid[row][NUMBER_OF_COL-1].isWall = true;
+}
+for (let col = 0; col < NUMBER_OF_COL; col++) {
+    if (col==START_COL && (0==START_ROW || START_ROW==NUMBER_OF_ROW-1)) continue;
+    if (col==END_COL && (0==END_ROW || END_ROW ==NUMBER_OF_ROW-1)) continue;
+    grid[0][col].isWall=true;
+    grid[NUMBER_OF_ROW-1][col].isWall=true;
+}
+NUMBER_OF_COL-=1;
+NUMBER_OF_ROW-=1;
   walls = [];
   rec(vertical, horizontal, grid, START_ROW, START_COL, END_ROW, END_COL);
   console.log("grid",grid);

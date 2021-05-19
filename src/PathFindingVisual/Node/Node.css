@@ -10,8 +10,9 @@
     height: 25px;
     outline:1px solid lightblue;
     display: inline-block;
-    margin-right: 0px ;
-    margin-bottom: -6px;
+    /* margin:1px; */
+    /* margin-right: 1px ; */
+    /* margin-bottom: -6px; */
     -webkit-user-select: none;
     -khtml-user-select: none;
     -moz-user-select: none;
@@ -73,7 +74,7 @@
     background-color: black ;
     outline:1px solid #232b2e;
     opacity: 0.9 ;
-    /* animation: smallToBig 0.1s ease-out ; */
+    animation: smallToBig 0.1s ease-out ;
 }
 
 
