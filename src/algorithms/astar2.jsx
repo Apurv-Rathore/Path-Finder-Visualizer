@@ -64,10 +64,10 @@ const return_path = (current_node, grid, NUMBER_OF_ROW, NUMBER_OF_COL) => {
 
   while (current !== undefined) {
     path.push(current.position);
-    console.log(current);
+    // console.log(current);
     current = current.parent;
   }
-  console.log(path);
+//   console.log(path);
   return path;
 };
 
@@ -94,18 +94,18 @@ export function astar2(
   let yet_to_visit_list = [];
   let visited_list = [];
 
+  let visitedNodesInOrder = [];
+
   yet_to_visit_list.push(start_node);
 
   let outer_iterations = 0;
   let max_iterations = 10;
-
   let move = [
     [-1, 0],
     [0, -1],
     [1, 0],
     [0, 1],
   ];
-
   while (yet_to_visit_list.length !== 0) {
     outer_iterations += 1;
     let current_node = yet_to_visit_list[0];
@@ -118,10 +118,10 @@ export function astar2(
         current_index = index;
       }
     }
-    // if (outer_iterations > max_iterations * 1000) {
-    //   alert("too many iterations");
-    //   return [];
-    // }
+    if (outer_iterations > max_iterations * 10000) {
+      alert("too many iterations");
+      return {path:-1,visitedNodesInOrder};
+    }
     // yet_to_visit_list.filter((thing) => thing!==current_node);
 
     let newyettovisitlist = [];
@@ -135,12 +135,12 @@ export function astar2(
       yet_to_visit_list.push(newyettovisitlist[indexxx]);
     }
     visited_list.push(current_node);
-    console.log(end_node);
+    // console.log(end_node);
     // if ((current_node.position[0] === end_node.position[0]) && (current_node.position[1] === end_node.position[1])) {
     if (end_node.isEqual(current_node)) {
       // console.log("current_node",current_node.row,current_node.col);
       // console.log("end_node",end_node.row,end_node.col);
-      return return_path(current_node, grid, NUMBER_OF_ROW, NUMBER_OF_COL);
+      return {path:return_path(current_node, grid, NUMBER_OF_ROW, NUMBER_OF_COL),visitedNodesInOrder};
     }
 
     let childrens = [];
@@ -170,13 +170,16 @@ export function astar2(
 
       if (visited_list.includes(child)) continue;
       child.g = current_node.g + 1;
-      child.h = heuristic(
-        END_ROW,
-        END_COLUMN,
-        child.row,
-        child.col,
-        currentHeuristic
-      );
+
+        child.g = Math.pow(END_COLUMN-child.position[1],2)+Math.pow(END_ROW-child.position[0],2);
+
+    //   child.h = heuristic(
+    //     END_ROW,
+    //     END_COLUMN,
+    //     child.row,
+    //     child.col,
+    //     currentHeuristic
+    //   );
       child.f = child.g + child.h;
       let flag = 0;
       for (let j = 0; j < yet_to_visit_list.length; j++) {
@@ -187,7 +190,8 @@ export function astar2(
         }
       }
       if (flag === 1) continue;
-      console.log(child.position);
+    //   console.log(child.position,child.f,child.g,child.h);
+        visitedNodesInOrder.push(child.position);
       yet_to_visit_list.push(child);
     }
   }

@@ -237,7 +237,7 @@ export default class PathFinding extends Component {
     if (this.state.currentAlgo==="ASTAR2"){
       const currentHeuristic = this.state.currentHeuristic;
       // console.log(END_ROW,END_COLUMN)
-      const path = astar2(START_ROW,
+      const {path,visitedNodesInOrder} = astar2(START_ROW,
         START_COL,
         END_ROW,
         END_COLUMN,
@@ -246,7 +246,10 @@ export default class PathFinding extends Component {
         NUMBER_OF_ROW,
         currentHeuristic);
         // this.drawArrows(parent);
-        this.animateAlgo(path, path, "BFS");
+        console.log(path);
+        console.log(visitedNodesInOrder);
+        this.animateAlgo(visitedNodesInOrder, path, "BFS");
+        // this.animateAlgo(path, path, "BFS");
     }
 
     if (this.state.currentAlgo === "ASTAR") {
