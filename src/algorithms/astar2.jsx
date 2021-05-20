@@ -192,7 +192,10 @@ export function astar2(
     for (let indexx = 0; indexx < childrens.length; indexx++) {
       const child = childrens[indexx];
 
-      if (visited_list.includes(child)) continue;
+    //   if (visited_list.includes(child)) continue;
+      for (let yy=0;yy<visited_list.length;yy++){
+          if (visited_list[yy].isEqual(child)) continue;
+      }
       child.g = current_node.g + 1;
 
       child.h =
