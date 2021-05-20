@@ -150,7 +150,7 @@ export default class PathFinding extends Component {
         let newGrid = this.state.grid;
         newGrid[end_row][end_col].inPathFirst = true;
         this.setState({ newGrid });
-      }, 10 * i);
+      }, 1* i);
       setTimeout(() => {
         const node = visitedNodesInOrder[i];
         const end_row = node[0];
@@ -160,7 +160,7 @@ export default class PathFinding extends Component {
         newGrid[end_row][end_col].inPath = true;
 
         this.setState({ newGrid });
-      }, 50 * i);
+      }, 5 * i);
     }
   }
 
