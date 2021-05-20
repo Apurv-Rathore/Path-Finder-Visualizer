@@ -139,7 +139,7 @@ export function astar2(
         current_index = index;
       }
     }
-    if (outer_iterations > max_iterations * 10000) {
+    if (outer_iterations > max_iterations * 105) {
       alert("too many iterations");
       return { path: -1, visitedNodesInOrder };
     }
@@ -193,8 +193,15 @@ export function astar2(
       const child = childrens[indexx];
 
     //   if (visited_list.includes(child)) continue;
+    let flag2= false;
       for (let yy=0;yy<visited_list.length;yy++){
-          if (visited_list[yy].isEqual(child)) continue;
+          if (visited_list[yy].isEqual(child)) {
+              flag2 = true;
+              break
+          }
+      }
+      if (flag2==true){
+        continue;
       }
       child.g = current_node.g + 1;
 
