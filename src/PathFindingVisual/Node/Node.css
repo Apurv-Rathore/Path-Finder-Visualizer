@@ -61,7 +61,7 @@
     animation: smallToBig 0.1s ease-out ;
 }
 .shortestPathAstar{
-    background-color:rgb(96, 199, 12);
+    background-color:teal;
     opacity: 0.7 ;
     animation: smallToBig 0.1s ease-out ;
 }
