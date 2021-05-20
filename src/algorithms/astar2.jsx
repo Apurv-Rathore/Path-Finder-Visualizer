@@ -54,43 +54,41 @@ const return_path = (current_node, grid, NUMBER_OF_ROW, NUMBER_OF_COL) => {
   let path = [];
   let result = [];
   for (let index = 0; index < NUMBER_OF_ROW; index++) {
-      let roww = [];
-      for (let j = 0; j < NUMBER_OF_COL; j++) {
-          roww.push("N");
-      }
-      result.push(roww);
+    let roww = [];
+    for (let j = 0; j < NUMBER_OF_COL; j++) {
+      roww.push("N");
+    }
+    result.push(roww);
   }
   let current = current_node;
 
   while (current !== undefined) {
     path.push(current.position);
     // console.log(current);
-    if (current.parent==undefined) break;
+    if (current.parent == undefined) break;
     const pr = current.parent.position[0];
     const pc = current.parent.position[1];
 
     const cr = current.parent.position[0];
     const cc = current.parent.position[1];
 
-    if (cr===pr){
-        if ( pc+1===cc){
-            result[cr][cc]="U"
-        }
-        else{
-            result[cr][cc]="D"
-        }
+    if (cr === pr) {
+      if (pc + 1 === cc) {
+        result[cr][cc] = "U";
+      } else {
+        result[cr][cc] = "D";
+      }
     }
-    if (cc==pc){
-        if (cr+1==pr){
-            result[cr][cc]="L"
-        }
-        else{
-            result[cr][cc]="R"
-        }
+    if (cc == pc) {
+      if (cr + 1 == pr) {
+        result[cr][cc] = "L";
+      } else {
+        result[cr][cc] = "R";
+      }
     }
     current = current.parent;
   }
-//   console.log(path);
+  //   console.log(path);
   return path;
 };
 
@@ -143,7 +141,7 @@ export function astar2(
     }
     if (outer_iterations > max_iterations * 10000) {
       alert("too many iterations");
-      return {path:-1,visitedNodesInOrder};
+      return { path: -1, visitedNodesInOrder };
     }
     // yet_to_visit_list.filter((thing) => thing!==current_node);
 
@@ -163,7 +161,10 @@ export function astar2(
     if (end_node.isEqual(current_node)) {
       // console.log("current_node",current_node.row,current_node.col);
       // console.log("end_node",end_node.row,end_node.col);
-      return {path:return_path(current_node, grid, NUMBER_OF_ROW, NUMBER_OF_COL),visitedNodesInOrder};
+      return {
+        path: return_path(current_node, grid, NUMBER_OF_ROW, NUMBER_OF_COL),
+        visitedNodesInOrder,
+      };
     }
 
     let childrens = [];
@@ -194,27 +195,29 @@ export function astar2(
       if (visited_list.includes(child)) continue;
       child.g = current_node.g + 1;
 
-        child.g = Math.pow(END_COLUMN-child.position[1],2)+Math.pow(END_ROW-child.position[0],2);
+      child.h =
+        Math.pow(END_COLUMN - child.position[1], 2) +
+        Math.pow(END_ROW - child.position[0], 2);
 
-    //   child.h = heuristic(
-    //     END_ROW,
-    //     END_COLUMN,
-    //     child.row,
-    //     child.col,
-    //     currentHeuristic
-    //   );
+      //   child.h = heuristic(
+      //     END_ROW,
+      //     END_COLUMN,
+      //     child.row,
+      //     child.col,
+      //     currentHeuristic
+      //   );
       child.f = child.g + child.h;
       let flag = 0;
       for (let j = 0; j < yet_to_visit_list.length; j++) {
         const element = yet_to_visit_list[j];
-        if ((child.isEqual(element)) && (child.g >= element.g)) {
+        if (child.isEqual(element) && child.g > element.g) {
           flag = 1;
           break;
         }
       }
       if (flag === 1) continue;
-    //   console.log(child.position,child.f,child.g,child.h);
-        visitedNodesInOrder.push(child.position);
+        console.log(child.position,child.f,child.g,child.h);
+      visitedNodesInOrder.push(child.position);
       yet_to_visit_list.push(child);
     }
   }
