@@ -53,18 +53,41 @@ class Node {
 const return_path = (current_node, grid, NUMBER_OF_ROW, NUMBER_OF_COL) => {
   let path = [];
   let result = [];
-  // for (let index = 0; index < NUMBER_OF_ROW; index++) {
-  //     let roww = [];
-  //     for (let j = 0; j < NUMBER_OF_COL; j++) {
-  //         roww.push(-1);
-  //     }
-  //     result.push(roww);
-  // }
+  for (let index = 0; index < NUMBER_OF_ROW; index++) {
+      let roww = [];
+      for (let j = 0; j < NUMBER_OF_COL; j++) {
+          roww.push("N");
+      }
+      result.push(roww);
+  }
   let current = current_node;
 
   while (current !== undefined) {
     path.push(current.position);
     // console.log(current);
+    if (current.parent==undefined) break;
+    const pr = current.parent.position[0];
+    const pc = current.parent.position[1];
+
+    const cr = current.parent.position[0];
+    const cc = current.parent.position[1];
+
+    if (cr===pr){
+        if ( pc+1===cc){
+            result[cr][cc]="U"
+        }
+        else{
+            result[cr][cc]="D"
+        }
+    }
+    if (cc==pc){
+        if (cr+1==pr){
+            result[cr][cc]="L"
+        }
+        else{
+            result[cr][cc]="R"
+        }
+    }
     current = current.parent;
   }
 //   console.log(path);

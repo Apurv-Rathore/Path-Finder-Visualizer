@@ -18,7 +18,7 @@ import astar2 from "../algorithms/astar2";
 
 import randomMaze from "../Maze/randomMazeGen";
 import verticalMaze from "../Maze/verticalMaze";
-import recursiveDivision from "../Maze/recursiveDivision"
+import recursiveDivision from "../Maze/recursiveDivision";
 
 //constants
 let START_ROW = 10;
@@ -42,12 +42,13 @@ export default class PathFinding extends Component {
       msgDisplay: "none",
       msgOpacity: 0,
       timeTaken: 0,
-      currentMaze: "recDiv"
+      currentMaze: "recDiv",
+      shortestPathAstar: false,
     };
   }
 
   componentDidMount() {
-    const grid = getInitialGrid(false, [],false);
+    const grid = getInitialGrid(false, [], false);
     this.setState({ grid });
   }
 
@@ -110,11 +111,11 @@ export default class PathFinding extends Component {
   }
   displayMsg = () => {
     // console.log()
-    this.setState({msgDisplay:"block", msgOpacity:1});
+    this.setState({ msgDisplay: "block", msgOpacity: 1 });
     setTimeout(() => {
-      this.setState({msgDisplay:"none", msgOpacity:0});
-    },5000)
-  }
+      this.setState({ msgDisplay: "none", msgOpacity: 0 });
+    }, 5000);
+  };
   animateAlgo(visitedNodesInOrder, nodesInShortestPathOrder, algo) {
     for (let i = 0; i <= visitedNodesInOrder.length; i++) {
       if (i === visitedNodesInOrder.length) {
@@ -122,8 +123,12 @@ export default class PathFinding extends Component {
           return;
         }
         this.displayMsg();
+        if (algo == "astar2") {
+          setTimeout(() => {
+            this.drawArrowsASTAR(nodesInShortestPathOrder);
+          }, 10 * i);
+        }
         if (algo === "DFS") {
-          
           setTimeout(() => {
             this.animateShortestPath(visitedNodesInOrder);
           }, 5 * i);
@@ -145,7 +150,7 @@ export default class PathFinding extends Component {
         let newGrid = this.state.grid;
         newGrid[end_row][end_col].inPathFirst = true;
         this.setState({ newGrid });
-      }, 10*i);
+      }, 10 * i);
       setTimeout(() => {
         const node = visitedNodesInOrder[i];
         const end_row = node[0];
@@ -155,7 +160,7 @@ export default class PathFinding extends Component {
         newGrid[end_row][end_col].inPath = true;
 
         this.setState({ newGrid });
-      }, 10 * i);
+      }, 50 * i);
     }
   }
 
@@ -177,12 +182,18 @@ export default class PathFinding extends Component {
 
   //function for resetting the grid
   resetGrid = () => {
-    const grid = getInitialGrid(false, [],false);
+    const grid = getInitialGrid(false, [], false);
     this.setState({ grid });
+  };
+  drawArrowsASTAR = (path) => {
+    for (let indexx = 0; indexx < path.length; indexx++) {
+      let newGrid = this.state.grid;
+      newGrid[path[indexx][0]][path[indexx][1]].shortestPathAstar = true;
+      this.setState({ grid: newGrid });
+    }
   };
 
   drawArrows = (parent) => {
-    
     let end_row = END_ROW;
     let end_col = END_COLUMN;
     while (end_row !== START_ROW || end_col !== START_COL) {
@@ -230,31 +241,36 @@ export default class PathFinding extends Component {
   visualizeAlgo = () => {
     this.clearPath();
     let tempGrid = this.state.grid;
-    tempGrid[START_ROW][START_COL].isWall=false;
-    tempGrid[END_ROW][END_COLUMN].isWall=false;
+    tempGrid[START_ROW][START_COL].isWall = false;
+    tempGrid[END_ROW][END_COLUMN].isWall = false;
     const prevTime = performance.now();
 
-    if (this.state.currentAlgo==="ASTAR2"){
+    if (this.state.currentAlgo === "ASTAR2") {
       const currentHeuristic = this.state.currentHeuristic;
       // console.log(END_ROW,END_COLUMN)
-      const {path,visitedNodesInOrder} = astar2(START_ROW,
+      const { path, visitedNodesInOrder } = astar2(
+        START_ROW,
         START_COL,
         END_ROW,
         END_COLUMN,
         this.state.grid,
         NUMBER_OF_COL,
         NUMBER_OF_ROW,
-        currentHeuristic);
-        // this.drawArrows(parent);
-        console.log(path);
-        console.log(visitedNodesInOrder);
-        this.animateAlgo(visitedNodesInOrder, path, "BFS");
-        // this.animateAlgo(path, path, "BFS");
+        currentHeuristic
+      );
+      // for (let indexx = 0; indexx < path.length; indexx++) {
+      //   let newGrid = this.state.grid;
+      //   newGrid[path[indexx][0]][path[indexx][1]].shortestPathAstar = true;
+      //   this.setState({grid:newGrid})
+      // }
+      // this.drawArrowsASTAR(path);
+      this.animateAlgo(visitedNodesInOrder, path, "astar2");
+      // this.animateAlgo(path, path, "BFS");
     }
 
     if (this.state.currentAlgo === "ASTAR") {
       // console.log("this.state.currentHeuristic", this.state.currentHeuristic);
-      alert("ASTAR is wrong")
+      // alert("ASTAR is wrong")
       const currentHeuristic = this.state.currentHeuristic;
       const { parent, visitedNodes } = astar(
         START_ROW,
@@ -267,7 +283,7 @@ export default class PathFinding extends Component {
         currentHeuristic
       );
       const finalTime = performance.now();
-      this.setState({timeTaken:(finalTime-prevTime)});
+      this.setState({ timeTaken: finalTime - prevTime });
       // console.log(parent);
       let nodesInShortestPathOrder = [];
       // console.log(parent);
@@ -284,8 +300,6 @@ export default class PathFinding extends Component {
       this.animateAlgo(visitedNodes, nodesInShortestPathOrder, "BFS");
     }
     if (this.state.currentAlgo == "BFS") {
-      
-      
       let { parent, visitedNodesInOrder } = bfs(
         START_ROW,
         START_COL,
@@ -295,9 +309,9 @@ export default class PathFinding extends Component {
         NUMBER_OF_COL,
         NUMBER_OF_ROW
       );
-      
+
       const finalTime = performance.now();
-      this.setState({timeTaken:(finalTime-prevTime)});
+      this.setState({ timeTaken: finalTime - prevTime });
       let nodesInShortestPathOrder = -1;
       if (parent !== -1) {
         nodesInShortestPathOrder = nodesInShortestPath(
@@ -322,7 +336,7 @@ export default class PathFinding extends Component {
         NUMBER_OF_ROW
       );
       const finalTime = performance.now();
-      this.setState({timeTaken:(finalTime-prevTime)});
+      this.setState({ timeTaken: finalTime - prevTime });
       // console.log("visitedNodesInOrder",visitedNodesInOrder);
       let nodesInShortestPathOrder = -1;
       if (parent !== -1) {
@@ -340,7 +354,7 @@ export default class PathFinding extends Component {
   };
 
   clearPath = () => {
-    this.setState({ grid: getInitialGrid(true, this.state.grid,false) });
+    this.setState({ grid: getInitialGrid(true, this.state.grid, false) });
   };
 
   generateMaze = (currentMaze) => {
@@ -349,35 +363,61 @@ export default class PathFinding extends Component {
     START_ROW = 1;
     START_COL = 1;
     tempGrid[START_ROW][START_COL].isStart = true;
-    tempGrid[END_ROW][END_COLUMN].isFinish=false;
-    END_COLUMN = NUMBER_OF_COL-2;
-    END_ROW = NUMBER_OF_ROW-2;
-    tempGrid[END_ROW][END_COLUMN].isFinish=true;
-    this.setState({grid:tempGrid});
-    this.setState({ grid: getInitialGrid(true, this.state.grid,true) });
+    tempGrid[END_ROW][END_COLUMN].isFinish = false;
+    END_COLUMN = NUMBER_OF_COL - 2;
+    END_ROW = NUMBER_OF_ROW - 2;
+    tempGrid[END_ROW][END_COLUMN].isFinish = true;
+    this.setState({ grid: tempGrid });
+    this.setState({ grid: getInitialGrid(true, this.state.grid, true) });
 
-
-    if (currentMaze==="recDiv"){
-      const newGrid = recursiveDivision(this.state.grid,START_ROW,START_COL , END_ROW, END_COLUMN,NUMBER_OF_ROW,NUMBER_OF_COL);
-      this.setState({grid:newGrid});
+    if (currentMaze === "recDiv") {
+      const newGrid = recursiveDivision(
+        this.state.grid,
+        START_ROW,
+        START_COL,
+        END_ROW,
+        END_COLUMN,
+        NUMBER_OF_ROW,
+        NUMBER_OF_COL
+      );
+      this.setState({ grid: newGrid });
     }
-    if (currentMaze==="randomMaze"){
-      let {walls,newGrid} = randomMaze(this.state.grid,START_ROW,START_COL , END_ROW, END_COLUMN,NUMBER_OF_ROW,NUMBER_OF_COL);
-      this.setState({grid:newGrid});
+    if (currentMaze === "randomMaze") {
+      let { walls, newGrid } = randomMaze(
+        this.state.grid,
+        START_ROW,
+        START_COL,
+        END_ROW,
+        END_COLUMN,
+        NUMBER_OF_ROW,
+        NUMBER_OF_COL
+      );
+      this.setState({ grid: newGrid });
     }
-    if (currentMaze==="verticalMaze"){
-      const newGrid = verticalMaze(this.state.grid,START_ROW,START_COL , END_ROW, END_COLUMN,NUMBER_OF_ROW,NUMBER_OF_COL);
-      this.setState({grid:newGrid});
+    if (currentMaze === "verticalMaze") {
+      const newGrid = verticalMaze(
+        this.state.grid,
+        START_ROW,
+        START_COL,
+        END_ROW,
+        END_COLUMN,
+        NUMBER_OF_ROW,
+        NUMBER_OF_COL
+      );
+      this.setState({ grid: newGrid });
     }
-    if (currentMaze==="horzMaze"){
-      const newGrid = verticalMaze(this.state.grid,START_ROW,START_COL , END_ROW, END_COLUMN,NUMBER_OF_ROW,NUMBER_OF_COL);
-      this.setState({grid:newGrid});
+    if (currentMaze === "horzMaze") {
+      const newGrid = verticalMaze(
+        this.state.grid,
+        START_ROW,
+        START_COL,
+        END_ROW,
+        END_COLUMN,
+        NUMBER_OF_ROW,
+        NUMBER_OF_COL
+      );
+      this.setState({ grid: newGrid });
     }
-
-
-
-
-
 
     //for random Maze
     // this.setState({ grid: getInitialGrid(true, this.state.grid,true) });
@@ -392,9 +432,15 @@ export default class PathFinding extends Component {
       <div className="containerr">
         <div className="headerr" style={{ marginBottom: 10 }}>
           <div className="navbarr">
-            <Navbar style={{fontSize:17}} collapseOnSelect expand="lg" bg="dark" variant="dark">
+            <Navbar
+              style={{ fontSize: 17 }}
+              collapseOnSelect
+              expand="lg"
+              bg="dark"
+              variant="dark"
+            >
               <Navbar.Brand
-                style={{fontSize:30}}
+                style={{ fontSize: 30 }}
                 href="#home"
                 // style={{ marginLeft: 4, fontSize: 35 }}
               >
@@ -413,15 +459,10 @@ export default class PathFinding extends Component {
                 Clear Path
               </Nav.Link>
 
-              
               <Navbar.Toggle aria-controls="responsive-navbar-nav" />
               <Navbar.Collapse id="responsive-navbar-nav">
                 <Nav className="mr-auto">
-                  
-                  
-
                   <NavDropdown
-                  
                     title="Generate Maze"
                     id="collasible-nav-dropdown"
                     // style={{ marginRight: 10, fontSize: 25, color: "#0d6efd" }}
@@ -446,9 +487,7 @@ export default class PathFinding extends Component {
                     >
                       Horizontal Division Maze
                     </NavDropdown.Item>
-                    
                   </NavDropdown>
-
 
                   <NavDropdown
                     title="Algorithms"
@@ -511,12 +550,11 @@ export default class PathFinding extends Component {
                     </NavDropdown.Item>
                   </NavDropdown>
                   <Button
-              
-                onClick={() => this.visualizeAlgo()}
-                // style={{ marginRight: 20, marginLeft: 20, fontSize: 20 }}
-              >
-                Visualize {this.state.currentAlgo}
-              </Button>
+                    onClick={() => this.visualizeAlgo()}
+                    // style={{ marginRight: 20, marginLeft: 20, fontSize: 20 }}
+                  >
+                    Visualize {this.state.currentAlgo}
+                  </Button>
                 </Nav>
                 <Nav></Nav>
               </Navbar.Collapse>
@@ -538,9 +576,11 @@ export default class PathFinding extends Component {
                     inPathFirst,
                     inShortestPath,
                     direction,
+                    shortestPathAstar,
                   } = node;
                   return (
                     <Node
+                      shortestPathAstar={shortestPathAstar}
                       direction={direction}
                       key={nodeIdx}
                       col={col}
@@ -564,7 +604,16 @@ export default class PathFinding extends Component {
             );
           })}
         </div>
-        <div class="message" style={{display:this.state.msgDisplay, opacity: this.msgOpacity, fontSize:20}}>Time Taken: {Math.floor(this.state.timeTaken)} ms</div>
+        <div
+          class="message"
+          style={{
+            display: this.state.msgDisplay,
+            opacity: this.msgOpacity,
+            fontSize: 20,
+          }}
+        >
+          Time Taken: {Math.floor(this.state.timeTaken)} ms
+        </div>
         {/* <div className="popupContainer">
             hey i am a popup
           </div> */}
@@ -581,10 +630,10 @@ const getInitialGrid = (isClearPath, gridArg, resetWall) => {
         // currentRow.push(createNode(col, row, isClearPath));
 
         grid[row][col].isVisited = false;
-        if (resetWall){
-          grid[row][col].isWall =  false;
+        if (resetWall) {
+          grid[row][col].isWall = false;
         }
-        
+        grid[row][col].shortestPathAstar = false;
         grid[row][col].previousNode = null;
         grid[row][col].inPath = false;
         grid[row][col].inPathFirst = false;
@@ -619,6 +668,7 @@ const createNode = (col, row, isClearPath) => {
     inPathFirst: false,
     inShortestPath: false,
     direction: "",
+    shortestPathAstar: false,
   };
 };
 

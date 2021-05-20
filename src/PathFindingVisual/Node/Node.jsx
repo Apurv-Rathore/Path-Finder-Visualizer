@@ -21,7 +21,8 @@ export default class Node extends Component {
       onMouseEnter,
       onMouseUp,
       row,col,
-      direction
+      direction,
+      shortestPathAstar
     } = this.props;
 
     let extraClassName = "";
@@ -51,6 +52,9 @@ export default class Node extends Component {
       if (direction=="R"){
         arrowClassName = "left";
       }
+    }
+    if (shortestPathAstar){
+      extraClassName =  "shortestPathAstar";
     }
     if (isFinish) {
         extraClassName = "isFinish";
