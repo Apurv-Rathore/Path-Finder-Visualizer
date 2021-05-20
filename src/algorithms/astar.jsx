@@ -63,6 +63,7 @@ class PriorityQueue {
     }
   }
   dequeue() {
+    
     return this.items.shift();
   }
 

@@ -16,7 +16,10 @@
 
 body{
     font-size: 0;
-    font-family: 'Roboto', sans-serif;
+    /* font-family: 'Roboto', sans-serif; */
+    /* font-family: Arial, sans-serif; */
+    font-family: 'Julius Sans One', sans-serif;
+    font-weight: bold;
     margin: 0;
     padding: 0;
     width: 150;

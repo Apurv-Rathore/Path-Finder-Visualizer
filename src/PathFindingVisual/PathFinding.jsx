@@ -14,6 +14,7 @@ import "./PathFinding.css";
 import bfs from "../algorithms/bfs";
 import dfs from "../algorithms/dfs";
 import astar from "../algorithms/astar";
+import astar2 from "../algorithms/astar2";
 
 import randomMaze from "../Maze/randomMazeGen";
 import verticalMaze from "../Maze/verticalMaze";
@@ -232,6 +233,22 @@ export default class PathFinding extends Component {
     tempGrid[START_ROW][START_COL].isWall=false;
     tempGrid[END_ROW][END_COLUMN].isWall=false;
     const prevTime = performance.now();
+
+    if (this.state.currentAlgo==="ASTAR2"){
+      const currentHeuristic = this.state.currentHeuristic;
+      // console.log(END_ROW,END_COLUMN)
+      const path = astar2(START_ROW,
+        START_COL,
+        END_ROW,
+        END_COLUMN,
+        this.state.grid,
+        NUMBER_OF_COL,
+        NUMBER_OF_ROW,
+        currentHeuristic);
+        // this.drawArrows(parent);
+        this.animateAlgo(path, path, "BFS");
+    }
+
     if (this.state.currentAlgo === "ASTAR") {
       // console.log("this.state.currentHeuristic", this.state.currentHeuristic);
       alert("ASTAR is wrong")
@@ -248,9 +265,9 @@ export default class PathFinding extends Component {
       );
       const finalTime = performance.now();
       this.setState({timeTaken:(finalTime-prevTime)});
-      console.log(parent);
+      // console.log(parent);
       let nodesInShortestPathOrder = [];
-      console.log(parent);
+      // console.log(parent);
       if (parent !== -1 && parent != undefined) {
         nodesInShortestPathOrder = nodesInShortestPath(
           parent,
@@ -446,7 +463,7 @@ export default class PathFinding extends Component {
                       Depth first search
                     </NavDropdown.Item>
                     <NavDropdown.Item
-                      onClick={() => this.setState({ currentAlgo: "ASTAR" })}
+                      onClick={() => this.setState({ currentAlgo: "ASTAR2" })}
                     >
                       A*
                     </NavDropdown.Item>
