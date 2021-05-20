@@ -70,7 +70,7 @@
     animation-play-state: running; */
 }
 .shortestPathAstar{
-    background-color:rgb(2, 36, 51);
+    background-color:rgb(96, 199, 12);
     opacity: 0.7 ;
     animation: smallToBig 0.1s ease-out ;
 }
