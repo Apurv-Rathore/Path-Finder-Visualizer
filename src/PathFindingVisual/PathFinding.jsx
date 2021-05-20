@@ -160,7 +160,7 @@ export default class PathFinding extends Component {
         newGrid[end_row][end_col].inPath = true;
 
         this.setState({ newGrid });
-      }, 1 * i);
+      }, 1.1 * i);
     }
   }
 
