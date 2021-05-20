@@ -200,7 +200,7 @@ export function astar2(
               break
           }
       }
-      if (flag2==true){
+      if (flag2===true){
         continue;
       }
       child.g = current_node.g + 1;
@@ -231,5 +231,6 @@ export function astar2(
       yet_to_visit_list.push(child);
     }
   }
+  return {path:-1,visitedNodesInOrder}
 }
 export default astar2;
