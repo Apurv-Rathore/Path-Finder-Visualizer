@@ -51,7 +51,7 @@
     /* background-color: rgb(10, 15, 59); */
     background-color: rgb(2, 36, 51);
     opacity: 0.7 ;
-    /* animation: smallToBig 0.1s ease-out ;    */
+    animation: visitedAnimation 0.1s ease-out ;   
 }
 
 .inShortestPath{
@@ -93,7 +93,7 @@
     z-index: 11;
     background-repeat: no-repeat;
     background-size:contain;
-    animation: smallToBig 0.1s ease-out ;
+    animation: smallToBigFinish 0.1s ease-out ;
 }
 
 .right {
@@ -101,7 +101,7 @@
     z-index: 11;
     background-repeat: no-repeat;
     background-size:contain;
-    animation: smallToBig 0.1s ease-out ;
+    animation: smallToBigFinish 0.1s ease-out ;
      
 }
 
@@ -110,7 +110,8 @@
     z-index: 11;
     background-repeat: no-repeat;
     background-size:contain;
-    animation: smallToBig 0.1s ease-out ;
+    animation: smallToBigFinish 0.1s ease-out ;
+
 }
 
 .down{
@@ -118,7 +119,7 @@
     z-index: 11;
     background-repeat: no-repeat;
     background-size:contain;
-    animation: smallToBig 0.1s ease-out ;
+    animation: smallToBigFinish 0.1s ease-out ;
 }
 
 .isFinish{
@@ -133,7 +134,7 @@
     
     
 }
-/* @keyframes smallToBigFinish {
+@keyframes smallToBigFinish {
     0%{
         transform:  scaleX(1) scaleY(1) ;
     }
@@ -143,12 +144,12 @@
     100%{
         transform:  scaleX(1.1) scaleY(1.1) ;
     }
-} */
+}
 
 @keyframes visitedAnimation {
     0% {
       transform: scale(0.3);
-      background-color: rgb(255, 0, 255);
+      background-color: rgb(2, 36, 51);
       border-radius: 100%;
     }
   
