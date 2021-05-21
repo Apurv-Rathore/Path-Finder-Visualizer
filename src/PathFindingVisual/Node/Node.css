@@ -80,9 +80,13 @@
 
 .isStart{
     /* background-color: red; */
-    background-image: url(../../Logos/disc_icon.jpg) ;
+    background-image: url(../../Logos/target-circles.svg) ;
+    transform: scale(1.5);
+    cursor: grab;
     background-repeat: no-repeat;
-    background-size:contain
+    background-size:contain;
+    animation: smallToBigFin 0.5s ease-out ;
+    outline: none;
     /* background: url(../../Logos/flag_icon.png); */
 }
 
@@ -124,15 +128,27 @@
 
 .isFinish{
     /* pointer-events: none; */
-    background: url(../../Logos/download.svg);
+    background: url(../../Logos/destinaton.svg);
     /* z-index: 10; */
-    /* transform: scale(1) translate(-35%, -70%); */
-    /* cursor: grab; */
+    transform: scale(1.5);
+    cursor: grab;
     background-repeat: no-repeat;
     background-size:contain;
-    animation: smallToBig 0.5s ease-out ;
+    animation: smallToBigFin 0.5s ease-out ;
+    outline: none;
     
     
+}
+@keyframes smallToBigFin {
+  0%{
+      transform:  scaleX(1) scaleY(1) ;
+  }
+  50%{
+      transform:  scaleX(2) scaleY(2) ;
+  }
+  100%{
+      transform:  scaleX(1.1) scaleY(1.1) ;
+  }
 }
 @keyframes smallToBigFinish {
     0%{
