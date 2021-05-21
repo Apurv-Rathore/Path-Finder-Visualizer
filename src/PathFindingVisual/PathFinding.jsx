@@ -20,6 +20,10 @@ import randomMaze from "../Maze/randomMazeGen";
 import verticalMaze from "../Maze/verticalMaze";
 import recursiveDivision from "../Maze/recursiveDivision";
 
+import Modal from "react-awesome-modal";
+
+import path4 from "../Logos/path4.png";
+
 //constants
 let START_ROW = 10;
 let START_COL = 10;
@@ -44,7 +48,20 @@ export default class PathFinding extends Component {
       timeTaken: 0,
       currentMaze: "recDiv",
       shortestPathAstar: false,
+      visible: true,
     };
+  }
+
+  openModal() {
+    this.setState({
+      visible: true,
+    });
+  }
+
+  closeModal() {
+    this.setState({
+      visible: false,
+    });
   }
 
   componentDidMount() {
@@ -150,7 +167,7 @@ export default class PathFinding extends Component {
         let newGrid = this.state.grid;
         newGrid[end_row][end_col].inPathFirst = true;
         this.setState({ newGrid });
-      }, 1* i);
+      }, 1 * i);
       setTimeout(() => {
         const node = visitedNodesInOrder[i];
         const end_row = node[0];
@@ -430,6 +447,37 @@ export default class PathFinding extends Component {
     const { grid, mouseIsPressed } = this.state;
     return (
       <div className="containerr">
+        <Modal
+          visible={this.state.visible}
+          width="800"
+          height="550"
+          effect="fadeInUp"
+          onClickAway={() => this.closeModal()}
+        >
+          <div style={{fontSize:24}}>
+            <h1 style={{backgroundColor:"#00c0ff"}}>Welcome to The PathFinder Visualiser </h1>
+            <br />
+            <p >Visualize different algorithms in front of your eyes.
+            
+            <br />
+            <br />
+            Generate Mazes and play.
+            <br />
+            <br />
+            Enjoy!
+            <br />
+            </p>
+            
+            <img src={path4} style={{backgroundSize:40}} alt="fsd" />
+            <br />
+            <br />
+            {/* <br />
+            <br />
+            <br /> */}
+
+            <button style={{backgroundColor:'black',color:'white'}} onClick={() => this.closeModal()}>Let's Go</button>
+          </div>
+        </Modal>
         <div className="headerr" style={{ marginBottom: 10 }}>
           <div className="navbarr">
             <Navbar
