@@ -1,7 +1,7 @@
 # Getting Started with Create React App
 
 
-https://thelegend2710.github.io/Path-Finder-Visualizer/ Click this link to checkout the project. 
+https://apurv-rathore.github.io/Path-Finder-Visualizer/ Click this link to checkout the project. 
 
 
 
